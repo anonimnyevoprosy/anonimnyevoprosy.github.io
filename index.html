@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Анонимные вопросы в Telegram | Конвертер видео и аудио в кружки</title>
+    <meta name="description" content="Бот для анонимных вопросов и конвертации медиа в Telegram. Получайте честные ответы анонимно и конвертируйте видео/аудио в кружки Telegram. Без регистрации, просто и удобно.">
+    <meta name="keywords" content="анонимные вопросы, телеграм бот вопросы, конвертер видео телеграм, видео в кружок, аудио в голосовое, telegram bot, анонимный бот, секретные вопросы, mp4 в кружок, mp3 в голосовое">
+    <meta name="author" content="Telegram Боты">
+    <meta property="og:title" content="Анонимные вопросы и конвертер медиа в Telegram">
+    <meta property="og:description" content="Два полезных бота: для анонимных вопросов и конвертации видео/аудио в кружки Telegram.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://anonimnyevoprosy.github.io">
+    <meta property="og:image" content="https://anonimnyevoprosy.github.io/og-image.png">
+	<meta name="yandex-verification" content="f4db9e200434a430" />
+    <link rel="canonical" href="https://anonimnyevoprosy.github.io">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0088cc;
+            --primary-dark: #006699;
+            --primary-light: #e6f3fa;
+            --secondary: #6c5ce7;
+            --secondary-dark: #5649c0;
+            --text: #2d3748;
+            --text-light: #718096;
+            --light: #f8f9fa;
+            --white: #ffffff;
+            --gray: #edf2f7;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --rounded: 12px;
+            --rounded-lg: 20px;
+            --red: #ff4444;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            color: var(--text);
+            line-height: 1.6;
+            background-color: var(--white);
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background-color: var(--white);
+            box-shadow: var(--shadow);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 16px;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .hero {
+            padding: 100px 0;
+            background-color: var(--primary-light);
+        }
+        
+        .hero-content {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+        }
+        
+        .hero-text {
+            flex: 1;
+        }
+        
+        .hero-image {
+            flex: 1;
+            text-align: right;
+        }
+        
+        .hero-image img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        
+        .hero p {
+            font-size: 20px;
+            color: var(--text-light);
+            margin-bottom: 40px;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 32px;
+            border-radius: var(--rounded);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+            transition: all 0.3s;
+            box-shadow: var(--shadow);
+            border: none;
+            cursor: pointer;
+            gap: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: var(--white);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--secondary-dark);
+        }
+        
+        .btn-warning {
+            background-color: var(--red);
+            color: var(--white);
+        }
+        
+        .btn-warning:hover {
+            background-color: #e53935;
+        }
+        
+        .section {
+            padding: 100px 0;
+        }
+        
+        .section-title {
+            font-size: 36px;
+            margin-bottom: 60px;
+            color: var(--text);
+            font-weight: 700;
+            text-align: center;
+        }
+        
+        .section-subtitle {
+            font-size: 20px;
+            color: var(--text-light);
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 60px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background-color: var(--white);
+            border-radius: var(--rounded-lg);
+            padding: 40px 30px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid var(--gray);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .feature-title {
+            font-size: 22px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .feature-text {
+            color: var(--text-light);
+            font-size: 16px;
+        }
+        
+        .steps {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .step {
+            flex: 1;
+            min-width: 250px;
+            max-width: 320px;
+            text-align: center;
+            padding: 30px;
+            position: relative;
+        }
+        
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0 auto 25px;
+        }
+        
+        .step-title {
+            font-size: 20px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .step-text {
+            color: var(--text-light);
+        }
+        
+        .screenshots {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 50px;
+        }
+        
+        .screenshot {
+            border-radius: var(--rounded-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            transition: transform 0.3s;
+        }
+        
+        .screenshot:hover {
+            transform: scale(1.03);
+        }
+        
+        .screenshot img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .cta {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 80px 0;
+            text-align: center;
+            border-radius: var(--rounded-lg);
+            margin: 50px 0;
+        }
+        
+        .cta h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        
+        .cta p {
+            font-size: 20px;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            opacity: 0.9;
+        }
+        
+        .second-bot {
+            background-color: var(--gray);
+            padding: 80px 0;
+            border-radius: var(--rounded-lg);
+            margin: 60px 0;
+        }
+        
+        .second-bot-content {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+        }
+        
+        .second-bot-text {
+            flex: 1;
+            padding-right: 40px;
+        }
+        
+        .second-bot-text h2 {
+            font-size: 32px;
+            margin-bottom: 30px;
+            color: var(--text);
+            font-weight: 700;
+        }
+        
+        .feature-section {
+            margin-bottom: 30px;
+        }
+        
+        .feature-section h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: var(--text);
+            font-weight: 600;
+        }
+        
+        .feature-section p {
+            color: var(--text-light);
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .second-bot-image {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .second-bot-image img {
+            max-width: 100%;
+            height: auto;
+            background: transparent;
+        }
+        
+        .bot-info {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: var(--rounded);
+        }
+        
+        .bot-info p {
+            margin-bottom: 15px;
+            font-size: 15px;
+            color: var(--text);
+        }
+        
+        .bot-info a {
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .faq-grid {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            margin-bottom: 20px;
+            border: 1px solid var(--gray);
+            border-radius: var(--rounded);
+            overflow: hidden;
+        }
+        
+        .faq-question {
+            padding: 20px;
+            background-color: var(--gray);
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .faq-answer {
+            padding: 20px;
+            display: none;
+        }
+        
+        .faq-answer.active {
+            display: block;
+        }
+        
+        footer {
+            background-color: var(--text);
+            color: var(--white);
+            padding: 60px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s;
+            font-size: 15px;
+        }
+        
+        .footer-links a:hover {
+            color: var(--white);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+        }
+        
+        @media (max-width: 1024px) {
+            .hero-content,
+            .second-bot-content {
+                flex-direction: column;
+                gap: 40px;
+            }
+            
+            .hero-image,
+            .second-bot-image {
+                text-align: center;
+            }
+            
+            .second-bot-text {
+                padding-right: 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .nav-links {
+                gap: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero {
+                padding: 80px 0 60px;
+            }
+            
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .hero p {
+                font-size: 18px;
+            }
+            
+            .section {
+                padding: 60px 0;
+            }
+            
+            .section-title {
+                font-size: 30px;
+                margin-bottom: 40px;
+            }
+            
+            .section-subtitle {
+                font-size: 18px;
+                margin-bottom: 40px;
+            }
+            
+            .cta h2 {
+                font-size: 30px;
+            }
+            
+            .cta p {
+                font-size: 18px;
+            }
+            
+            .second-bot-text h2 {
+                font-size: 28px;
+            }
+            
+            .feature-section h3 {
+                font-size: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+            
+            .btn {
+                width: 100%;
+                padding: 16px 24px;
+            }
+            
+            .feature-card {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript" >
+   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+   m[i].l=1*new Date();
+   for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+   k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+   ym(101464546, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true,
+        webvisor:true
+   });
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/101464546" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">Анонимные вопросы</div>
+                <div class="nav-links">
+                    <a href="#features">Возможности</a>
+                    <a href="#how-it-works">Как это работает</a>
+                    <a href="#screenshots">Скриншоты</a>
+                    <a href="#second-bot">Второй бот</a>
+                    <a href="#faq">Вопросы</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Анонимные вопросы в Telegram</h1>
+                    <p>Получайте честные ответы, сохраняя полную анонимность. Просто, удобно, без регистрации.</p>
+                    <a href="https://t.me/anonimquestiontgbot" class="btn btn-primary">
+                        🔗 Перейти в бота
+                    </a>
+                </div>
+                <div class="hero-image">
+                    <img src="hero-image.png" alt="Анонимные вопросы в Telegram">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="features">
+        <div class="container">
+            <h2 class="section-title">Почему выбирают наш бот</h2>
+            <p class="section-subtitle">Самый удобный способ получать честные ответы на любые вопросы</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3 class="feature-title">Полная анонимность</h3>
+                    <p class="feature-text">Ваши вопросы остаются полностью анонимными. Получатель не узнает, кто их задал.</p>
+                </div>
+                <div class="feature-card">
+                    <h3 class="feature-title">Простота использования</h3>
+                    <p class="feature-text">Не нужно регистрироваться или устанавливать приложения. Просто перейдите в бота.</p>
+                </div>
+                <div class="feature-card">
+                    <h3 class="feature-title">Удобные ответы</h3>
+                    <p class="feature-text">Отвечайте на вопросы прямо в Telegram через функцию "Ответить".</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="how-it-works">
+        <div class="container">
+            <h2 class="section-title">Как это работает</h2>
+            <p class="section-subtitle">Всего 3 простых шага для начала использования</p>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3 class="step-title">Получите свою ссылку</h3>
+                    <p class="step-text">Начните с команды /start в боте, чтобы получить уникальную ссылку для вопросов.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3 class="step-title">Поделитесь ссылкой</h3>
+                    <p class="step-text">Отправьте свою ссылку друзьям или разместите в соцсетях, чтобы получать вопросы.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3 class="step-title">Получайте вопросы</h3>
+                    <p class="step-text">Вопросы будут приходить вам в бота. Отвечайте на них, когда будет удобно.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="screenshots">
+        <div class="container">
+            <h2 class="section-title">Скриншоты бота</h2>
+            <p class="section-subtitle">Посмотрите, как выглядит бот в действии</p>
+            <div class="screenshots">
+                <div class="screenshot">
+                    <img src="screen1.png" alt="Главное меню бота">
+                </div>
+                <div class="screenshot">
+                    <img src="screen2.png" alt="Пример вопроса">
+                </div>
+                <div class="screenshot">
+                    <img src="screen3.png" alt="Пример ответа">
+                </div>
+            </div>
+        </div>
+    </section>
+
+		<div class="container">
+    <div class="second-bot" id="second-bot">
+        <div class="second-bot-content" style="padding: 20px;">
+            <div class="second-bot-text">
+                <h2>Также у нас есть второй бот!</h2>
+                
+                <div class="feature-section">
+                    <h3>Конвертер видео в кружки</h3>
+                    <p>Преобразуйте любые видео (MP4) в удобные видеосообщения Telegram (кружки). Просто отправьте боту видеофайл и получите готовый кружок.</p>
+                </div>
+                
+                <div class="feature-section">
+                    <h3>Конвертер аудио в голосовые</h3>
+                    <p>Легко конвертируйте аудиофайлы (MP3) в голосовые сообщения Telegram. Отправьте боту аудио и получите готовое голосовое сообщение.</p>
+                </div>
+                
+				<div class="feature-section">
+                <p>Просто отправьте боту видео или аудио файл и получите готовое сообщение в нужном формате!</p>
+				</div>
+                
+                <a href="https://t.me/instrumentikbot" class="btn btn-secondary">
+                    🚀 Перейти в конвертер
+                </a>
+                
+                <div class="bot-info">
+                    <p><strong>Что умеет этот бот?</strong></p>
+                    <p>Бот работает на бесплатной основе и выполняет преобразование обычных аудио и видео в медиаформаты Telegram (кружки и видеосообщения).</p>
+                    <p>По вопросам сотрудничества: <a href="https://t.me/t3lezhe4ka">свяжитесь с разработчиком</a></p>
+                </div>
+            </div>
+            <div class="second-bot-image">
+                <img src="converter.png" alt="Конвертер видео и аудио в Telegram">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <div class="container">
+        <div class="cta">
+            <h2>Готовы получать анонимные вопросы?</h2>
+            <p>Начните прямо сейчас - это бесплатно и займет меньше минуты!</p>
+            <a href="https://t.me/anonimquestiontgbot" class="btn btn-primary">
+                ‼️ Начать использовать
+            </a>
+        </div>
+    </div>
+
+    <section class="section" id="faq">
+        <div class="container">
+            <h2 class="section-title">Часто задаваемые вопросы</h2>
+            <p class="section-subtitle">Ответы на самые популярные вопросы о нашем сервисе</p>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Это действительно анонимно?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Да, абсолютно. Бот не сохраняет и не передает информацию о том, кто задал вопрос. Мы технически не можем определить отправителя.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Можно ли узнать, кто задал вопрос?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Нет, это технически невозможно. Мы не храним данные, которые могли бы раскрыть анонимность. Даже администраторы бота не могут узнать отправителя.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Есть ли ограничения на вопросы?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Ограничений нет.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Как отвечать на вопросы?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Просто используйте функцию "Ответить" в Telegram на сообщение с вопросом. Ваш ответ будет отправлен анонимно автору вопроса.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Боты</h3>
+                    <ul class="footer-links">
+                        <li><a href="https://t.me/anonimquestiontgbot">Анонимные вопросы</a></li>
+                        <li><a href="https://t.me/instrumentikbot">Конвертер медиа</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Помощь</h3>
+                    <ul class="footer-links">
+                        <li><a href="#faq">Частые вопросы</a></li>
+                        <li><a href="#">Поддержка</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                © 2025 Telegram Боты. Все права защищены.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // FAQ accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                const isOpen = answer.classList.contains('active');
+                
+                // Close all answers
+                document.querySelectorAll('.faq-answer').forEach(a => {
+                    a.classList.remove('active');
+                    a.previousElementSibling.querySelector('span:last-child').textContent = '+';
+                });
+                
+                // Open current if wasn't open
+                if (!isOpen) {
+                    answer.classList.add('active');
+                    question.querySelector('span:last-child').textContent = '-';
+                }
+            });
+        });
+    </script>
+
+    <!-- Schema.org markup for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Анонимные вопросы и конвертер медиа в Telegram",
+        "description": "Два полезных бота: для анонимных вопросов и конвертации видео/аудио в кружки Telegram.",
+        "url": "https://ваш-домен.com",
+        "applicationCategory": ["CommunicationApplication", "MultimediaApplication"],
+        "operatingSystem": "Telegram",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "applicationSuite": "Telegram Боты",
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.9",
+            "reviewCount": "256"
+        },
+        "keywords": "анонимные вопросы, конвертер видео телеграм, видео в кружок, аудио в голосовое, telegram bot, mp4 в кружок, mp3 в голосовое"
+    }
+    </script>
+</body>
+</html>
